@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>极速云杀毒 - 新一代杀毒软件</title>
+    <!-- 使用国内CDN资源 -->
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            /* 浅色主题变量 */
+            --primary-color: #0066ff;
+            --primary-dark: #0052d4;
+            --secondary-color: #00d4ff;
+            --bg-color: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --text-secondary: #666666;
+            --border-color: #e0e0e0;
+            --shadow: 0 8px 30px rgba(0, 102, 255, 0.08);
+            --accent-color: #ff3366;
+            --gradient: linear-gradient(135deg, #0066ff 0%, #00d4ff 100%);
+            --header-gradient: linear-gradient(to right, #0066ff, #00d4ff);
+        }
+        
+        [data-theme="dark"] {
+            /* 深色主题变量 */
+            --primary-color: #3395ff;
+            --primary-dark: #1a7cff;
+            --secondary-color: #00e5ff;
+            --bg-color: #0a0e17;
+            --bg-secondary: #131a2d;
+            --card-bg: #1a2238;
+            --text-color: #f0f4ff;
+            --text-secondary: #a0b3e0;
+            --border-color: #2a3554;
+            --shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+            --accent-color: #ff4d7e;
+            --gradient: linear-gradient(135deg, #3395ff 0%, #00e5ff 100%);
+            --header-gradient: linear-gradient(to right, #1a2238, #0066ff);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+        
+        body {
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+        
+        /* 防查看源码 */
+        html, body {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
+        }
+        
+        /* 防右键菜单 */
+        body {
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        /* 自定义滚动条 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* 头部样式 */
+        header {
+            background: var(--header-gradient);
+            padding: 20px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            object-fit: cover;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        .logo-text h1 {
+            font-size: 1.8rem;
+            background: linear-gradient(90deg, #fff, #c2e9ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 700;
+        }
+        
+        .logo-text p {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 4px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 0;
+            position: relative;
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: white;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        
+        .theme-toggle {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            backdrop-filter: blur(10px);
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+        
+        /* 英雄区域 */
+        .hero {
+            padding: 100px 0;
+            text-align: center;
+            background: var(--bg-color);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(0, 102, 255, 0.05) 0%, transparent 50%);
+        }
+        
+        .hero-content h2 {
+            font-size: 3.2rem;
+            margin-bottom: 20px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1.2;
+        }
+        
+        .hero-content p {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto 40px;
+        }
+        
+        .version-badge {
+            display: inline-block;
+            background: var(--gradient);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            box-shadow: 0 6px 20px rgba(0, 102, 255, 0.3);
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 40px;
+        }
+        
+        .btn {
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+            box-shadow: 0 6px 20px rgba(0, 102, 255, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0, 102, 255, 0.4);
+        }
+        
+        .btn-secondary {
+            background: var(--bg-secondary);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        /* 特性区域 */
+        .features {
+            padding: 100px 0;
+            background: var(--bg-secondary);
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .section-subtitle {
+            text-align: center;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto 60px;
+            font-size: 1.1rem;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .feature-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            background: var(--gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            color: white;
+            font-size: 1.5rem;
+        }
+        
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .feature-card p {
+            color: var(--text-secondary);
+        }
+        
+        /* 引擎区域 */
+        .engines {
+            padding: 100px 0;
+        }
+        
+        .engines-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .engine-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            border-top: 4px solid var(--primary-color);
+        }
+        
+        .engine-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: var(--bg-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: var(--primary-color);
+            font-size: 1.8rem;
+        }
+        
+        /* 系统要求 */
+        .requirements {
+            padding: 100px 0;
+            background: var(--bg-secondary);
+        }
+        
+        .requirements-content {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+            margin-top: 50px;
+        }
+        
+        .requirements-img {
+            flex: 1;
+            background: var(--gradient);
+            border-radius: 20px;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .requirements-img::before {
+            content: '';
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            top: -50px;
+            right: -50px;
+        }
+        
+        .requirements-list {
+            flex: 1;
+        }
+        
+        .requirements-list ul {
+            list-style: none;
+        }
+        
+        .requirements-list li {
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .requirements-list li i {
+            color: var(--primary-color);
+        }
+        
+        /* 联系信息 */
+        .contact {
+            padding: 100px 0;
+        }
+        
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .contact-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+        
+        .contact-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: white;
+            font-size: 1.5rem;
+        }
+        
+        .contact-card h3 {
+            margin-bottom: 10px;
+        }
+        
+        .contact-card a, .contact-card p {
+            color: var(--text-secondary);
+            text-decoration: none;
+        }
+        
+        .contact-card a:hover {
+            color: var(--primary-color);
+        }
+        
+        /* 致谢区域 */
+        .thanks {
+            padding: 80px 0;
+            background: var(--bg-secondary);
+            text-align: center;
+        }
+        
+        .thanks p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+        
+        /* 页脚 */
+        footer {
+            background: var(--card-bg);
+            padding: 50px 0 20px;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+        
+        .footer-logo h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .footer-links h4 {
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+        
+        .footer-links ul {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary-color);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 992px) {
+            .hero-content h2 {
+                font-size: 2.5rem;
+            }
+            
+            .requirements-content {
+                flex-direction: column;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: flex;
+            }
+            
+            .hero-content h2 {
+                font-size: 2rem;
+            }
+            
+            .hero-content p {
+                font-size: 1.1rem;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero {
+                padding: 60px 0;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .features, .engines, .requirements, .contact, .thanks {
+                padding: 60px 0;
+            }
+        }
+        
+        /* 绘制图标 */
+        .icon-shield {
+            width: 24px;
+            height: 24px;
+            position: relative;
+        }
+        
+        .icon-shield::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: currentColor;
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+        }
+        
+        .icon-cloud {
+            width: 24px;
+            height: 24px;
+            position: relative;
+        }
+        
+        .icon-cloud::before {
+            content: '';
+            position: absolute;
+            width: 18px;
+            height: 12px;
+            border-radius: 12px 12px 0 0;
+            background: currentColor;
+            top: 0;
+            left: 3px;
+        }
+        
+        .icon-cloud::after {
+            content: '';
+            position: absolute;
+            width: 24px;
+            height: 12px;
+            border-radius: 0 0 12px 12px;
+            background: currentColor;
+            bottom: 0;
+        }
+        
+        .icon-bolt {
+            width: 24px;
+            height: 24px;
+            position: relative;
+        }
+        
+        .icon-bolt::before {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-bottom: 12px solid currentColor;
+            top: 0;
+            left: 4px;
+        }
+        
+        .icon-bolt::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 12px solid currentColor;
+            bottom: 0;
+            left: 4px;
+        }
+        
+        .icon-pc {
+            width: 24px;
+            height: 24px;
+            position: relative;
+        }
+        
+        .icon-pc::before {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 12px;
+            border: 2px solid currentColor;
+            border-radius: 3px;
+            top: 0;
+            left: 2px;
+        }
+        
+        .icon-pc::after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            height: 6px;
+            background: currentColor;
+            bottom: 0;
+            left: 10px;
+        }
+        
+        .icon-ai {
+            width: 24px;
+            height: 24px;
+            position: relative;
+        }
+        
+        .icon-ai::before, .icon-ai::after {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+        
+        .icon-ai::before {
+            top: 0;
+            left: 0;
+        }
+        
+        .icon-ai::after {
+            bottom: 0;
+            right: 0;
+        }
+        
+        .icon-ai i {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: currentColor;
+            top: 8px;
+            left: 8px;
+            transform: rotate(45deg);
+        }
+        
+        /* 深色/浅色模式切换动画 */
+        .theme-toggle i {
+            transition: transform 0.5s ease;
+        }
+        
+        [data-theme="dark"] .fa-sun {
+            display: none;
+        }
+        
+        [data-theme="dark"] .fa-moon {
+            display: block;
+        }
+        
+        .fa-sun {
+            display: block;
+        }
+        
+        .fa-moon {
+            display: none;
+        }
+        
+        /* 移动端菜单 */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 280px;
+            height: 100vh;
+            background: var(--card-bg);
+            z-index: 1001;
+            padding: 30px;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+            transition: right 0.3s ease;
+        }
+        
+        .mobile-menu.active {
+            right: 0;
+        }
+        
+        .menu-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .close-menu {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-color);
+            cursor: pointer;
+        }
+        
+        .mobile-nav-links {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .mobile-nav-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 1.2rem;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .mobile-nav-links a:hover {
+            color: var(--primary-color);
+        }
+        
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        
+        .menu-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+    </style>
+</head>
+<body>
+    <!-- 防查看源码脚本 -->
+    <script>
+        // 防止查看源码
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+        
+        document.addEventListener('keydown', function(e) {
+            // 禁用F12
+            if(e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I') || (e.ctrlKey && e.key === 'U')) {
+                e.preventDefault();
+            }
+        });
+        
+        // 防止选择文本
+        document.addEventListener('selectstart', function(e) {
+            e.preventDefault();
+        });
+        
+        // 防止拖拽
+        document.addEventListener('dragstart', function(e) {
+            e.preventDefault();
+        });
+    </script>
+    
+    <!-- 状态存储变量 -->
+    <script>
+        // 页面状态存储
+        const pageState = {
+            theme: localStorage.getItem('theme') || 'light',
+            menuOpen: false
+        };
+    </script>
+    
+    <!-- 头部 -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <img src="https://cdn2.hkts.dpdns.org/Logo.jpg" alt="极速云杀毒Logo" class="logo-img">
+                <div class="logo-text">
+                    <h1>极速云杀毒</h1>
+                    <p>新一代杀毒软件 · 综合速度较快 · UI美观好看</p>
+                </div>
+            </div>
+            
+            <nav class="nav-links">
+                <a href="#features">产品特性</a>
+                <a href="#engines">杀毒引擎</a>
+                <a href="#requirements">系统要求</a>
+                <a href="#contact">联系我们</a>
+                <a href="Update_log.html">更新日志</a>
+                <a href="/Doc">文档</a>
+            </nav>
+            
+            <button class="theme-toggle" id="themeToggle">
+                <i class="fas fa-sun"></i>
+                <i class="fas fa-moon"></i>
+            </button>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+    
+    <!-- 移动端菜单 -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="menu-header">
+            <h3>极速云杀毒</h3>
+            <button class="close-menu" id="closeMenu">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="mobile-nav-links">
+            <a href="#features">产品特性</a>
+            <a href="#engines">杀毒引擎</a>
+            <a href="#requirements">系统要求</a>
+            <a href="#contact">联系我们</a>
+            <a href="Update_log.html">更新日志</a>
+            <a href="Logs.html">历史版本</a>
+            <a href="/Doc">文档</a>
+            <a href="download.html">立即下载</a>
+        </div>
+    </div>
+    <div class="menu-overlay" id="menuOverlay"></div>
+    
+    <!-- 英雄区域 -->
+    <section class="hero">
+        <div class="container hero-content">
+            <div class="version-badge">最新版本 V6.0</div>
+            <h2>极速云杀毒</h2>
+            <p>由极速云平台所推出的新一代杀毒软件，综合速度较快，UI美观好看，为您提供全方位的安全保护。</p>
+            
+            <div class="cta-buttons">
+                <a href="download.html" class="btn btn-primary">
+                    <i class="fas fa-download"></i> 立即下载
+                </a>
+                <a href="Update_log.html" class="btn btn-secondary">
+                    <i class="fas fa-history"></i> 查看更新日志
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 特性区域 -->
+    <section class="features" id="features">
+        <div class="container">
+            <h2 class="section-title">产品特性</h2>
+            <p class="section-subtitle">极速云杀毒集成了多项先进技术，为您提供快速、高效、美观的安全解决方案</p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <div class="icon-bolt"></div>
+                    </div>
+                    <h3>极速扫描</h3>
+                    <p>采用多线程扫描技术，大幅提升扫描速度，不影响系统性能，快速检测和清除威胁。</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <div class="icon-shield"></div>
+                    </div>
+                    <h3>全面保护</h3>
+                    <p>实时防护、病毒查杀、恶意软件防护、勒索软件防护等多重安全保护，全面守护您的系统安全。</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <div class="icon-cloud"></div>
+                    </div>
+                    <h3>智能云引擎</h3>
+                    <p>结合云端病毒库和AI分析，实时更新病毒特征，有效防御新型未知威胁。</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <div class="icon-ai"></div>
+                    </div>
+                    <h3>AI智能防护</h3>
+                    <p>内置AX病毒查杀模型，通过人工智能技术识别未知威胁，提供智能化安全防护。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 引擎区域 -->
+    <section class="engines" id="engines">
+        <div class="container">
+            <h2 class="section-title">杀毒引擎</h2>
+            <p class="section-subtitle">融合多种先进扫描引擎，提供多层次、全方位的安全防护</p>
+            
+            <div class="engines-grid">
+                <div class="engine-card">
+                    <div class="engine-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <h3>极速云杀毒本地病毒库</h3>
+                    <p>内置高效本地病毒库，快速识别已知威胁，提供离线安全保护。</p>
+                </div>
+                
+                <div class="engine-card">
+                    <div class="engine-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>AX病毒查杀模型</h3>
+                    <p>基于人工智能的威胁检测模型，能够识别未知病毒和恶意软件。</p>
+                </div>
+                
+                <div class="engine-card">
+                    <div class="engine-icon">
+                        <i class="fas fa-cloud"></i>
+                    </div>
+                    <h3>猎剑云引擎</h3>
+                    <p>由猎剑云提供的云端扫描服务，实时更新病毒特征，应对最新威胁。</p>
+                </div>
+                
+                <div class="engine-card">
+                    <div class="engine-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>极速云引擎</h3>
+                    <p>极速云平台自主研发的高性能扫描引擎，提供快速高效的安全扫描。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 系统要求 -->
+    <section class="requirements" id="requirements">
+        <div class="container">
+            <h2 class="section-title">系统要求</h2>
+            <p class="section-subtitle">极速云杀毒支持广泛的Windows系统，占用资源少，运行流畅</p>
+            
+            <div class="requirements-content">
+                <div class="requirements-img">
+                    <div>
+                        <div class="icon-pc" style="margin: 0 auto 20px; color: white; font-size: 3rem;"></div>
+                        <p>Windows 7+</p>
+                        <p style="font-size: 1rem; margin-top: 10px;">2C2G 推荐配置</p>
+                    </div>
+                </div>
+                
+                <div class="requirements-list">
+                    <ul>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span><strong>操作系统：</strong> Windows 7/8/10/11 (32位/64位)</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span><strong>处理器：</strong> 双核处理器 1.5GHz 或更高</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span><strong>内存：</strong> 2GB RAM (推荐4GB或更高)</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span><strong>硬盘空间：</strong> 500MB 可用空间</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span><strong>网络：</strong> 需要互联网连接以获取更新和云扫描</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span><strong>分辨率：</strong> 1024×768 或更高</span>
+                        </li>
+                    </ul>
+                    
+                    <div style="margin-top: 30px;">
+                        <a href="download.html" class="btn btn-primary">
+                            <i class="fas fa-download"></i> 下载安装包
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 联系信息 -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <h2 class="section-title">联系我们</h2>
+            <p class="section-subtitle">获取技术支持、反馈问题或了解更多关于极速云杀毒的信息</p>
+            
+            <div class="contact-grid">
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <h3>官方邮箱</h3>
+                    <a href="mailto:admin@hkts.dpdns.org">admin@hkts.dpdns.org</a>
+                </div>
+                
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fab fa-qq"></i>
+                    </div>
+                    <h3>QQ支持</h3>
+                    <p>QQ: 2895881250</p>
+                    <p>QQ群: 558611029</p>
+                </div>
+                
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fab fa-weixin"></i>
+                    </div>
+                    <h3>微信客服</h3>
+                    <p>jisucloud2025</p>
+                </div>
+                
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fab fa-github"></i>
+                    </div>
+                    <h3>GitHub</h3>
+                    <a href="https://github.com/muyuer-comp/JisuCloud-Antivirus" target="_blank">项目主页</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 致谢区域 -->
+    <section class="thanks">
+        <div class="container">
+            <h2 class="section-title">特别感谢</h2>
+            <p>猎剑云提供云端引擎扫描服务</p>
+            <p>木鱼</p>
+            
+            <div style="margin-top: 40px;">
+                <a href="Logs.html" class="btn btn-secondary">
+                    <i class="fas fa-code-branch"></i> 查看历史版本
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h3>极速云杀毒</h3>
+                    <p>新一代杀毒软件<br>综合速度较快，UI美观好看</p>
+                </div>
+                
+                <div class="footer-links">
+                    <h4>快速链接</h4>
+                    <ul>
+                        <li><a href="download.html">下载</a></li>
+                        <li><a href="Update_log.html">更新日志</a></li>
+                        <li><a href="Logs.html">历史版本</a></li>
+                        <li><a href="/Doc">文档</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-links">
+                    <h4>技术支持</h4>
+                    <ul>
+                        <li><a href="mailto:admin@hkts.dpdns.org">官方邮箱</a></li>
+                        <li><a href="#contact">QQ支持</a></li>
+                        <li><a href="#contact">微信客服</a></li>
+                        <li><a href="https://github.com/muyuer-comp/JisuCloud-Antivirus" target="_blank">GitHub</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-links">
+                    <h4>关于我们</h4>
+                    <ul>
+                        <li><a href="#features">产品特性</a></li>
+                        <li><a href="#engines">杀毒引擎</a></li>
+                        <li><a href="#requirements">系统要求</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023-2026 极速云杀毒. 保留所有权利. 版本 V6.0</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // 状态变量
+        let currentTheme = pageState.theme;
+        let isMenuOpen = pageState.menuOpen;
+        
+        // 初始化主题
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            setTheme(savedTheme);
+        }
+        
+        // 设置主题
+        function setTheme(theme) {
+            currentTheme = theme;
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            
+            // 更新按钮图标
+            const sunIcon = document.querySelector('.fa-sun');
+            const moonIcon = document.querySelector('.fa-moon');
+            
+            if (theme === 'dark') {
+                sunIcon.style.display = 'none';
+                moonIcon.style.display = 'block';
+            } else {
+                sunIcon.style.display = 'block';
+                moonIcon.style.display = 'none';
+            }
+        }
+        
+        // 切换主题
+        function toggleTheme() {
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            setTheme(newTheme);
+        }
+        
+        // 移动菜单控制
+        function toggleMobileMenu() {
+            isMenuOpen = !isMenuOpen;
+            const mobileMenu = document.getElementById('mobileMenu');
+            const menuOverlay = document.getElementById('menuOverlay');
+            
+            if (isMenuOpen) {
+                mobileMenu.classList.add('active');
+                menuOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            } else {
+                mobileMenu.classList.remove('active');
+                menuOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+        
+        // 关闭移动菜单
+        function closeMobileMenu() {
+            isMenuOpen = false;
+            const mobileMenu = document.getElementById('mobileMenu');
+            const menuOverlay = document.getElementById('menuOverlay');
+            
+            mobileMenu.classList.remove('active');
+            menuOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    // 如果是移动端，先关闭菜单
+                    if (window.innerWidth <= 768) {
+                        closeMobileMenu();
+                    }
+                    
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化主题
+            initTheme();
+            
+            // 主题切换按钮
+            const themeToggle = document.getElementById('themeToggle');
+            themeToggle.addEventListener('click', toggleTheme);
+            
+            // 移动菜单按钮
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+            
+            // 关闭菜单按钮
+            const closeMenuBtn = document.getElementById('closeMenu');
+            closeMenuBtn.addEventListener('click', closeMobileMenu);
+            
+            // 菜单遮罩层点击关闭
+            const menuOverlay = document.getElementById('menuOverlay');
+            menuOverlay.addEventListener('click', closeMobileMenu);
+            
+            // 防查看源码增强
+            document.addEventListener('keydown', function(e) {
+                // 禁用Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C, Ctrl+U
+                if ((e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) || 
+                    (e.ctrlKey && e.key === 'u') || 
+                    (e.key === 'F12')) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+            
+            // 防开发者工具
+            setInterval(function() {
+                const before = new Date().getTime();
+                debugger;
+                const after = new Date().getTime();
+                if (after - before > 100) {
+                    // 检测到开发者工具打开
+                    document.body.innerHTML = '<div style="display:flex;justify-content:center;align-items:center;height:100vh;background:#0a0e17;color:#fff;font-size:24px;">请勿使用开发者工具查看源码</div>';
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
